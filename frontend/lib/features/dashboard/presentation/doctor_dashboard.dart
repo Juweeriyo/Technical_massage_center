@@ -34,11 +34,6 @@ class DoctorDashboard extends StatelessWidget {
           route: "/doctor-appointments",
         ),
 
-        SidebarItemData(
-          icon: Icons.medical_information,
-          title: "Diagnosis",
-          route: "/doctor-diagnosis",
-        ),
 
         SidebarItemData(
           icon: Icons.healing,

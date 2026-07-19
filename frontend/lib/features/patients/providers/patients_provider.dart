@@ -6,7 +6,8 @@ final patientsProvider = FutureProvider<List<Patient>>((ref) async {
   return await patientsRepository.getPatients();
 });
 
-final searchPatientsProvider = FutureProvider.family<List<Patient>, String>((ref, query) async {
+final searchPatientsProvider =
+    FutureProvider.family<List<Patient>, String>((ref, query) async {
   if (query.isEmpty) {
     return await patientsRepository.getPatients();
   }

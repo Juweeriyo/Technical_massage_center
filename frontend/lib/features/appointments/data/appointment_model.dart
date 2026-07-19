@@ -1,15 +1,15 @@
 class Appointment {
   final int id;
-  final int patientId;
-  final int doctorId;
+  final int? patientId;
+  final int? doctorId;
   final String date;
   final String time;
   final String status;
 
   Appointment({
     required this.id,
-    required this.patientId,
-    required this.doctorId,
+    this.patientId,
+    this.doctorId,
     required this.date,
     required this.time,
     required this.status,
@@ -20,9 +20,9 @@ class Appointment {
       id: json['id'],
       patientId: json['patient_id'],
       doctorId: json['doctor_id'],
-      date: json['date'],
-      time: json['time'],
-      status: json['status'],
+      date: json['date'] ?? "",
+      time: json['time'] ?? "",
+      status: json['status'] ?? "Scheduled",
     );
   }
 

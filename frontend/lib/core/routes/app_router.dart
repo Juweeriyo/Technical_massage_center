@@ -6,7 +6,7 @@ import '../../features/patients/presentation/patients_screen.dart';
 import '../../features/appointments/presentation/appointments_screen.dart';
 import '../../features/treatments/presentation/treatments_screen.dart';
 import '../../features/payments/presentation/payments_screen.dart';
-import '../../features/diagnosis/presentation/diagnosis_screen.dart';
+
 import '../../features/dashboard/presentation/admin_dashboard.dart';
 import '../../features/dashboard/presentation/doctor_dashboard.dart';
 import '../../features/dashboard/presentation/staff_dashboard.dart';
@@ -39,10 +39,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/payments',
         builder: (context, state) => const PaymentsScreen(),
       ),
-      GoRoute(
-        path: '/diagnoses',
-        builder: (context, state) => const DiagnosisScreen(),
-      ),
+
       GoRoute(
         path: '/admin-dashboard',
         builder: (context, state) => const AdminDashboard(),

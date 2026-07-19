@@ -5,9 +5,7 @@ import '../data/patients_repository.dart';
 import '../providers/patients_provider.dart';
 import '../data/patient_model.dart';
 
-
 class AddPatientDialog extends ConsumerStatefulWidget {
-
   final Patient? patient;
 
   const AddPatientDialog({
@@ -29,31 +27,24 @@ class _AddPatientDialogState extends ConsumerState<AddPatientDialog> {
   String _gender = 'Male';
   bool _isLoading = false;
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  if (widget.patient != null) {
+    if (widget.patient != null) {
+      _fullNameController.text = widget.patient!.fullName;
 
-    _fullNameController.text =
-        widget.patient!.fullName;
+      _phoneController.text = widget.patient!.phoneNumber;
 
-    _phoneController.text =
-        widget.patient!.phoneNumber;
+      _ageController.text = widget.patient!.age.toString();
 
-    _ageController.text =
-        widget.patient!.age.toString();
+      _addressController.text = widget.patient!.address;
 
-    _addressController.text =
-        widget.patient!.address;
+      _medicalNotesController.text = widget.patient!.medicalNotes ?? "";
 
-    _medicalNotesController.text =
-        widget.patient!.medicalNotes ?? "";
-
-    _gender =
-        widget.patient!.gender;
+      _gender = widget.patient!.gender;
+    }
   }
-}
 
   @override
   void dispose() {
@@ -67,41 +58,38 @@ void initState() {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     setState(() {
       _isLoading = true;
     });
 
     try {
-    final patientData = {
-  'full_name': _fullNameController.text,
-  'phone_number': _phoneController.text,
-  'gender': _gender,
-  'age': int.parse(_ageController.text),
-  'address': _addressController.text,
-  'medical_notes': _medicalNotesController.text.isNotEmpty
-      ? _medicalNotesController.text
-      : null,
-};
+      final patientData = {
+        'full_name': _fullNameController.text,
+        'phone_number': _phoneController.text,
+        'gender': _gender,
+        'age': int.parse(_ageController.text),
+        'address': _addressController.text,
+        'medical_notes': _medicalNotesController.text.isNotEmpty
+            ? _medicalNotesController.text
+            : null,
+      };
 
+      if (widget.patient == null) {
+        // Add new patient
+        await patientsRepository.createPatient(patientData);
+      } else {
+        // Update existing patient
+        await patientsRepository.updatePatient(
+          widget.patient!.id,
+          patientData,
+        );
+      }
 
-if (widget.patient == null) {
-
-  // Add new patient
-  await patientsRepository.createPatient(patientData);
-
-} else {
-
-  // Update existing patient
-  await patientsRepository.updatePatient(
-    widget.patient!.id,
-    patientData,
-  );
-
-}
-    } 
-    
-    catch (e) {
+      // Refresh patient list
+      ref.invalidate(patientsProvider);
+      ref.invalidate(searchPatientsProvider);
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error adding patient: $e')),
@@ -129,10 +117,8 @@ if (widget.patient == null) {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             Text(
-  widget.patient == null
-      ? 'Add New Patient'
-      : 'Edit Patient', style: Theme.of(context).textTheme.displaySmall),
+              Text(widget.patient == null ? 'Add New Patient' : 'Edit Patient',
+                  style: Theme.of(context).textTheme.displaySmall),
               const SizedBox(height: 24),
               TextFormField(
                 controller: _fullNameController,
@@ -153,7 +139,8 @@ if (widget.patient == null) {
                       initialValue: _gender,
                       decoration: const InputDecoration(labelText: 'Gender'),
                       items: ['Male', 'Female', 'Other']
-                          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                          .map(
+                              (e) => DropdownMenuItem(value: e, child: Text(e)))
                           .toList(),
                       onChanged: (v) => setState(() => _gender = v!),
                     ),
@@ -178,7 +165,8 @@ if (widget.patient == null) {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _medicalNotesController,
-                decoration: const InputDecoration(labelText: 'Medical Notes (Optional)'),
+                decoration: const InputDecoration(
+                    labelText: 'Medical Notes (Optional)'),
                 maxLines: 3,
               ),
               const SizedBox(height: 32),
@@ -193,12 +181,16 @@ if (widget.patient == null) {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submit,
                     child: _isLoading
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                        : const Text( 
-                              widget.patient == null
-                                  ? 'Save Patient'
-                                  : 'Update Patient',
-                            ),
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                color: Colors.white, strokeWidth: 2))
+                        : Text(
+                            widget.patient == null
+                                ? 'Save Patient'
+                                : 'Update Patient',
+                          ),
                   ),
                 ],
               ),

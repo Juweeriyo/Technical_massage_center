@@ -1,7 +1,8 @@
 class Payment {
   final int id;
   final int patientId;
-  final double amount;
+  final double? totalAmount;
+  final double? amountPaid;
   final String paymentMethod;
   final String status;
   final String date;
@@ -9,7 +10,8 @@ class Payment {
   Payment({
     required this.id,
     required this.patientId,
-    required this.amount,
+    this.totalAmount,
+    this.amountPaid,
     required this.paymentMethod,
     required this.status,
     required this.date,
@@ -19,7 +21,8 @@ class Payment {
     return Payment(
       id: json['id'],
       patientId: json['patient_id'],
-      amount: json['amount'].toDouble(),
+      totalAmount: json['total_amount'] != null ? json['total_amount'].toDouble() : null,
+      amountPaid: json['amount_paid'] != null ? json['amount_paid'].toDouble() : null,
       paymentMethod: json['payment_method'],
       status: json['status'],
       date: json['date'],
@@ -29,7 +32,8 @@ class Payment {
   Map<String, dynamic> toJson() {
     return {
       'patient_id': patientId,
-      'amount': amount,
+      'total_amount': totalAmount,
+      'amount_paid': amountPaid,
       'payment_method': paymentMethod,
       'status': status,
     };

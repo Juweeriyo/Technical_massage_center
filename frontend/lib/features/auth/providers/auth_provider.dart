@@ -34,3 +34,8 @@ final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>((ref) {
   final authService = ref.watch(authServiceProvider);
   return AuthStateNotifier(authService);
 });
+
+final userRoleProvider = FutureProvider<String?>((ref) async {
+  final authService = ref.watch(authServiceProvider);
+  return await authService.getRole();
+});

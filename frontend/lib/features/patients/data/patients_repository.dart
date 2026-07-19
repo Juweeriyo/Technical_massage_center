@@ -28,33 +28,32 @@ class PatientsRepository {
     }
     throw Exception('Failed to create patient');
   }
-}
 
-Future<Patient> updatePatient(
-  int id,
-  Map<String, dynamic> patientData,
-) async {
+  Future<Patient> updatePatient(
+    int id,
+    Map<String, dynamic> patientData,
+  ) async {
+    final response = await apiClient.put(
+      '/patients/$id',
+      patientData,
+    );
 
-  final response = await apiClient.put(
-    '/patients/$id',
-    patientData,
-  );
+    if (response.statusCode == 200) {
+      return Patient.fromJson(jsonDecode(response.body));
+    }
 
-  if (response.statusCode == 200) {
-    return Patient.fromJson(jsonDecode(response.body));
+    throw Exception('Failed to update patient');
   }
 
-  throw Exception('Failed to update patient');
-}
+  Future<void> deletePatient(int id) async {
+    final response = await apiClient.delete('/patients/$id');
 
-Future<void> deletePatient(int id) async {
+    print("DELETE Status = ${response.statusCode}");
+    print("DELETE Body = ${response.body}");
 
-  final response = await apiClient.delete(
-    '/patients/$id',
-  );
-
-  if (response.statusCode != 200) {
-    throw Exception('Failed to delete patient');
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
   }
 }
 

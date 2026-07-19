@@ -47,8 +47,8 @@ class Patient(PatientBase):
 
 # Appointment Schemas
 class AppointmentBase(BaseModel):
-    patient_id: int
-    doctor_id: int
+    patient_id: Optional[int] = None
+    doctor_id: Optional[int] = None
     date: date
     time: str
     status: str = "Scheduled"
@@ -58,23 +58,6 @@ class AppointmentCreate(AppointmentBase):
 
 class Appointment(AppointmentBase):
     id: int
-
-    class Config:
-        from_attributes = True
-
-# Diagnosis Schemas
-class DiagnosisBase(BaseModel):
-    patient_id: int
-    doctor_id: int
-    symptoms: str
-    recommendations: str
-
-class DiagnosisCreate(DiagnosisBase):
-    pass
-
-class Diagnosis(DiagnosisBase):
-    id: int
-    created_at: datetime
 
     class Config:
         from_attributes = True
@@ -90,6 +73,7 @@ class TreatmentPlanBase(BaseModel):
 
 class TreatmentPlanCreate(BaseModel):
     patient_id: int
+    doctor_id: int
     treatment_name: str
     mode: int
     number_of_sessions: int
@@ -99,11 +83,12 @@ class TreatmentPlanCreate(BaseModel):
 class TreatmentPlan(BaseModel):
     id: int
     patient_id: int
+    doctor_id: Optional[int] = None
     treatment_name: str
-    mode: int
+    mode: Optional[int] = None
     number_of_sessions: int
     start_date: date
-    end_date: date | None = None
+    end_date: Optional[date] = None
     status: str
 
     class Config:
@@ -112,7 +97,8 @@ class TreatmentPlan(BaseModel):
 # Payment Schemas
 class PaymentBase(BaseModel):
     patient_id: int
-    amount: float
+    total_amount: float
+    amount_paid: float
     payment_method: str
     status: str = "Unpaid"
 
@@ -125,6 +111,20 @@ class Payment(PaymentBase):
 
     class Config:
         from_attributes = True
+
+class PaymentStaff(BaseModel):
+    id: int
+    patient_id: int
+    payment_method: str
+    status: str
+    date: datetime
+
+    class Config:
+        from_attributes = True
+
+class PatientPaymentStatus(BaseModel):
+    patient_id: int
+    status: str
 
 # SessionNote Schemas
 class SessionNoteBase(BaseModel):

@@ -1,6 +1,7 @@
 class TreatmentPlan {
   final int id;
   final int patientId;
+  final int doctorId;
   final String treatmentName;
   final int mode;
   final int numberOfSessions;
@@ -11,6 +12,7 @@ class TreatmentPlan {
   TreatmentPlan({
     required this.id,
     required this.patientId,
+    required this.doctorId,
     required this.treatmentName,
     required this.mode,
     required this.numberOfSessions,
@@ -23,8 +25,9 @@ class TreatmentPlan {
     return TreatmentPlan(
       id: json['id'],
       patientId: json['patient_id'],
+      doctorId: json['doctor_id'] ?? 0,
       treatmentName: json['treatment_name'],
-      mode: json['mode'],
+      mode: json['mode'] ?? 1,
       numberOfSessions: json['number_of_sessions'],
       startDate: json['start_date'],
       endDate: json['end_date'],
@@ -35,6 +38,7 @@ class TreatmentPlan {
   Map<String, dynamic> toJson() {
     return {
       'patient_id': patientId,
+      'doctor_id': doctorId,
       'treatment_name': treatmentName,
       'number_of_sessions': numberOfSessions,
       'mode': mode,

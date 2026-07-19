@@ -3,7 +3,7 @@ from fastapi import FastAPI
 # pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
-from routers import auth, patients, appointments, treatments, payments, users, diagnoses
+from routers import auth, patients, appointments, treatments, payments, users
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -13,7 +13,7 @@ app = FastAPI(title="CERAGEM SOMALIA API")
 # Configure CORS for Flutter frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, replace with specific origins
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,7 +26,7 @@ app.include_router(appointments.router)
 app.include_router(treatments.router)
 app.include_router(payments.router)
 app.include_router(users.router)
-app.include_router(diagnoses.router)
+
 
 @app.get("/")
 def read_root():

@@ -25,11 +25,7 @@ class AdminDashboard extends StatelessWidget {
           title: "Appointments",
           route: "/appointments",
         ),
-        SidebarItemData(
-          icon: Icons.medical_services,
-          title: "Diagnosis",
-          route: "/diagnoses",
-        ),
+
         SidebarItemData(
           icon: Icons.healing,
           title: "Treatments",

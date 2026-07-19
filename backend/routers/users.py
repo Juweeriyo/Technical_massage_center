@@ -39,3 +39,9 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), c
     
     users = db.query(models.User).offset(skip).limit(limit).all()
     return users
+
+@router.get("/doctors", response_model=List[schemas.User])
+def read_doctors(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    # Any authenticated user can view the list of doctors
+    doctors = db.query(models.User).filter(models.User.role == "Doctor").all()
+    return doctors

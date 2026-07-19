@@ -19,6 +19,28 @@ class AppointmentsRepository {
     }
     throw Exception('Failed to create appointment');
   }
+
+  Future<Appointment> updateAppointment(int id, Map<String, dynamic> data) async {
+    final response = await apiClient.put('/appointments/$id', data);
+    if (response.statusCode == 200) {
+      return Appointment.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Failed to update appointment');
+  }
+
+  Future<void> cancelAppointment(int id) async {
+    final response = await apiClient.put('/appointments/$id/cancel', {});
+    if (response.statusCode != 200) {
+      throw Exception('Failed to cancel appointment');
+    }
+  }
+
+  Future<void> deleteAppointment(int id) async {
+    final response = await apiClient.delete('/appointments/$id');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete appointment');
+    }
+  }
 }
 
 final appointmentsRepository = AppointmentsRepository();
