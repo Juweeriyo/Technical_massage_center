@@ -7,7 +7,7 @@ import os
 
 # PostgreSQL Connection String (adjust as needed for local environment)
 # Using a default local connection string, change if needed.
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:jihaan@localhost/ceragem_db")
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:1234@localhost:5434/ceragem_db")
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
